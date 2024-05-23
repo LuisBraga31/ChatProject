@@ -1,8 +1,9 @@
-import './App.css'
+import { useState } from 'react'
 
 import Join from './componenets/Join/Join'
 import Chat from './componenets/Chat/Chat'
-import { useState } from 'react'
+
+import './App.css'
 
 function App() {
 
@@ -10,7 +11,8 @@ function App() {
   const [socket, setSocket] = useState(null);
 
   return (
-    <div className="App">
+    <div className="app">
+      <h1 className="title"> Chat em Tempo Real </h1>
       {
         chatVisibility ? <Chat socket={socket}/> : <Join setSocket={setSocket} setChatVisibility={setChatVisibility}/>
       }

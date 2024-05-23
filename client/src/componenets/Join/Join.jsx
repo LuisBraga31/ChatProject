@@ -2,6 +2,8 @@
 import { useRef } from "react"
 import io from 'socket.io-client'
 
+import './join.css';
+
 export default function Join({setSocket, setChatVisibility}) {
 
   const usernameRef = useRef();
@@ -17,9 +19,9 @@ export default function Join({setSocket, setChatVisibility}) {
   }
 
   return (
-    <div>
-        <h1> Join </h1>
-        <input type="text" ref={usernameRef} placeholder="Username"/>
+    <div className="join">
+        <h2> Chat 01 </h2>
+        <input type="text" ref={usernameRef} placeholder="Nome"/>
         <button onClick={()=> handleSubmit()}> Entrar </button>
     </div>
   )
