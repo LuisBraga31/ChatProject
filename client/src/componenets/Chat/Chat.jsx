@@ -12,11 +12,22 @@ export default function Chat({socket}) {
 
     socket.emit('message', message)
     clearInput()
+    focusInput()
   }
 
   const clearInput = () => {
     messageRef.current.value = ''
   }
+
+  const focusInput = () => {
+    messageRef.current.focus()
+  }
+
+  const getEnterKey = (e) => {
+    if(e.key === 'Enter') 
+      handleSubmit()
+  }
+
 
   useEffect(()=> {
     socket.on('receive_message', data => {
@@ -35,7 +46,7 @@ export default function Chat({socket}) {
           ))
         }
         
-        <input type="text" ref={messageRef} placeholder="Mensagem"/>
+        <input type="text" ref={messageRef} onKeyDown={(e)=>getEnterKey(e)} placeholder="Mensagem"/>
         <button onClick={() => handleSubmit()}> Enviar </button>
 
     </div>
