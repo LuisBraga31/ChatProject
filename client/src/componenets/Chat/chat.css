@@ -16,6 +16,7 @@
 
 .message-container{
     max-width: 250px;
+    word-wrap: break-word;
     width: fit-content;
     background-color: lightgrey;
     margin-top: 10px;

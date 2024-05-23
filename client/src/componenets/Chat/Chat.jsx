@@ -7,6 +7,7 @@ import './chat.css';
 export default function Chat({socket}) {
 
   const messageRef = useRef();
+  const bottomRef = useRef();
   const [messageList, setMessageList] = useState([]);
 
   const handleSubmit = () => {
@@ -31,6 +32,9 @@ export default function Chat({socket}) {
       handleSubmit()
   }
 
+  const scrollDown = () => {
+    bottomRef.current.scrollIntoView({behavior: 'smooth'})
+  }
 
   useEffect(()=> {
     socket.on('receive_message', data => {
@@ -40,6 +44,10 @@ export default function Chat({socket}) {
     return () => socket.off('receive_message')
   }, [socket])
 
+  useEffect(()=>{
+    scrollDown()
+  }, [messageList])
+  
   return (
     <div className="chat">
         <div className="chat-container">
@@ -53,6 +61,7 @@ export default function Chat({socket}) {
                </div>
               ))
             }
+            <div ref={bottomRef} />
           </div>
 
           <div className="chat-footer">
