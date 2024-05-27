@@ -9,12 +9,13 @@ export default function Chat({socket}) {
   const messageRef = useRef();
   const bottomRef = useRef();
   const [messageList, setMessageList] = useState([]);
+  const [room, setRoom] = useState('');
 
   const handleSubmit = () => {
     const message = messageRef.current.value
     if(!message.trim()) return
 
-    socket.emit('message', message)
+    socket.emit('message', room, message)
     clearInput()
     focusInput()
   }
@@ -40,24 +41,51 @@ export default function Chat({socket}) {
     socket.on('receive_message', data => {
       setMessageList((current) => [... current, data])      
     })
+    socket.on('user_joined', (message) => {
+      setMessageList((current) => [...current, { text: message, system: true }]);
+    });
 
-    return () => socket.off('receive_message')
+    socket.on('user_left', (message) => {
+      setMessageList((current) => [...current, { text: message, system: true }]);
+    });
+
+    return () => {
+      socket.off('receive_message')
+      socket.off('user_joined')
+      socket.off('user_left')
+    }
+
   }, [socket])
 
   useEffect(()=>{
     scrollDown()
   }, [messageList])
+
+  useEffect(() => {
+    socket.on('room_joined', (room) => {
+      setRoom(room);
+    });
+
+    return () => socket.off('room_joined');
+  }, [socket]);
   
   return (
     <div className="chat">
+      <h1> {room} </h1>
         <div className="chat-container">
-
+          
           <div className="chat-body">
             { 
               messageList.map((message, index) => (
                 <div className={`message-container ${message.authorId === socket.id && `message-mine`}`} key={index}>
-                  <div className="message-author"><strong>{message.author}</strong></div>
-                  <div className="message-text">{message.text}</div>
+                  {message.system ? (
+                    <div className="message-text system">{message.text}</div>
+                  ) : (
+                    <>
+                      <div className="message-author"><strong>{message.author}</strong></div>
+                      <div className="message-text">{message.text}</div>
+                    </>
+                  )}
                </div>
               ))
             }

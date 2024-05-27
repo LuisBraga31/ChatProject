@@ -64,3 +64,9 @@
     transform: scale(1.1);
     font-weight: bold;
 }
+
+.system {
+    text-align: center;
+    font-style: italic;
+    color: gray;
+  }

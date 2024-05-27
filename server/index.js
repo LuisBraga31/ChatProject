@@ -16,8 +16,19 @@ io.on('connection', socket =>{
         console.log(socket.data.username)
     })
 
-    socket.on('message', text => {
-        io.emit('receive_message', {
+    socket.on('join_room', room => {
+        socket.join(room);
+        socket.emit('room_joined', room);
+        io.to(room).emit('user_joined', `${socket.data.username} entrou na sala!`);
+        console.log(`Usuário ${socket.data.username} entrou na sala ${room}`);
+    });
+
+    socket.on('leave_room', room => {
+        io.to(room).emit('user_left', `${socket.data.username} saiu da sala!`);
+    })
+
+    socket.on('message', (room, text) => {
+        io.to(room).emit('receive_message', {
             text,
             authorId: socket.id,
             author: socket.data.username
