@@ -6,32 +6,37 @@ const generateID = () => {
     return Math.random().toString(36).substring(2, 8); 
 };
 
-const rooms = new Set();
+const rooms = new Map();
 
 const PORT = 3001
 
 io.on('connection', socket =>{
 
+    // Armazen nome do usuario
     socket.on('set_username', username => {
         socket.data.username = username 
     })
 
+    // Criando uma sala
     socket.on('create_room', () => {
         let roomID;
         do {
             roomID = generateID()
         } while(rooms.has(roomID))
-        rooms.add(roomID)
+        rooms.set(roomID, new Set());
         socket.join(roomID)
         socket.data.room = roomID
+        rooms.get(roomID).add(socket.id);
         socket.emit('room_created', roomID)
-        console.log(`Room criada: ${roomID}' por ${socket.data.username}`)
+        console.log(`Room criada: ${roomID} por ${socket.data.username}`)
     })
 
+    // Entrando em uma sala
     socket.on('join_room', roomID => {
         if(rooms.has(roomID)) {
             socket.join(roomID);
             socket.emit('room_joined', roomID);
+            rooms.get(roomID).add(socket.id);
             socket.data.room = roomID
             io.to(roomID).emit('user_joined', `${socket.data.username} entrou na sala!`);
             console.log(`Usuário ${socket.data.username} entrou na sala ${roomID}`);
@@ -41,16 +46,23 @@ io.on('connection', socket =>{
 
     });
 
+    //Saindo da sala
     socket.on('leave_room', roomID => {
         if(socket.data.room === roomID) {
             io.to(roomID).emit('user_left', `${socket.data.username} saiu da sala!`);
             socket.leave(roomID);
             socket.data.room = null;
+            rooms.get(roomID).delete(socket.id); 
             console.log(`Usuário ${socket.data.username} saiu da sala ${roomID}`);
+        }
+        if(rooms.get(roomID).size === 0) {
+            rooms.delete(roomID);
+            console.log(`Sala ${roomID} foi removida por estar vazia.`);
         }
 
     })
 
+    // Enviando mensagem
     socket.on('message', (roomID, text) => {
         if(rooms.has(roomID)) {
             io.to(roomID).emit('receive_message', {
@@ -61,13 +73,20 @@ io.on('connection', socket =>{
         }
     })
 
+    // Desconectando
     socket.on('disconnect', reason => {
         const roomID = socket.data.room
 
         if(roomID) {
             io.to(socket.data.room).emit('user_left', `${socket.data.username} saiu da sala`)
             socket.leave(roomID)
+            rooms.get(roomID).delete(socket.id); 
             console.log(`Usuário ${socket.data.username} desconectado da sala: ${roomID}`);
+            
+            if(rooms.get(roomID).size === 0) {
+                rooms.delete(roomID);
+                console.log(`Sala ${roomID} foi removida por estar vazia.`);
+            }
         }
         
     })
