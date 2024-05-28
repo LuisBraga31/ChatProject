@@ -4,18 +4,17 @@ import { IoMdSend } from "react-icons/io";
 
 import './chat.css';
 
-export default function Chat({socket}) {
+export default function Chat({socket, roomID}) {
 
   const messageRef = useRef();
   const bottomRef = useRef();
   const [messageList, setMessageList] = useState([]);
-  const [room, setRoom] = useState('');
 
   const handleSubmit = () => {
     const message = messageRef.current.value
     if(!message.trim()) return
 
-    socket.emit('message', room, message)
+    socket.emit('message', roomID, message)
     clearInput()
     focusInput()
   }
@@ -60,18 +59,10 @@ export default function Chat({socket}) {
   useEffect(()=>{
     scrollDown()
   }, [messageList])
-
-  useEffect(() => {
-    socket.on('room_joined', (room) => {
-      setRoom(room);
-    });
-
-    return () => socket.off('room_joined');
-  }, [socket]);
   
   return (
     <div className="chat">
-      <h1> {room} </h1>
+      <h1> {roomID} </h1>
         <div className="chat-container">
           
           <div className="chat-body">
