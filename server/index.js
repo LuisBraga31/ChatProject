@@ -2,20 +2,25 @@ const app = require('express')()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server, {cors: {origin: 'http://localhost:5173'}})
 
-const {v4: uuidv4 } = require('uuid');
+const generateID = () => {
+    return Math.random().toString(36).substring(2, 8); 
+};
+
 const rooms = new Set();
 
 const PORT = 3001
 
 io.on('connection', socket =>{
-    console.log('Usuario Conectado', socket.id);
 
     socket.on('set_username', username => {
         socket.data.username = username 
     })
 
     socket.on('create_room', () => {
-        const roomID = uuidv4()
+        let roomID;
+        do {
+            roomID = generateID()
+        } while(rooms.has(roomID))
         rooms.add(roomID)
         socket.join(roomID)
         socket.data.room = roomID
