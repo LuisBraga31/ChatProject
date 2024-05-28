@@ -1,14 +1,21 @@
 .join {
+    display: flex;
+    gap: 40px;
+}
+
+.join-item {
+    width: 300px;
     background-color: aliceblue;
     padding: 40px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     gap: 20px;
 }
 
-.join button {
+.join-item button {
     background-color: #34B7F1;
     cursor: pointer;
     padding: 8px 16px;
@@ -19,7 +26,7 @@
     transition: 0.3s all linear;
 }
 
-.join button:hover {
+.join-item button:hover {
     transform: scale(1.1);
     font-weight: bold;
 }

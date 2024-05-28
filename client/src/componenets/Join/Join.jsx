@@ -6,11 +6,12 @@ import './join.css';
 
 export default function Join({setSocket, setChatVisibility, setRoomID}) {
 
-  const usernameRef = useRef();
+  const usernameRefCreate = useRef();
+  const usernameRefEnter = useRef();
   const roomRef = useRef();
 
   const handleCreateRoom = async () =>{
-    const username = usernameRef.current.value;
+    const username = usernameRefCreate.current.value;
 
     if(!username.trim()) return
     const socket = await io.connect('http://localhost:3001')
@@ -25,7 +26,7 @@ export default function Join({setSocket, setChatVisibility, setRoomID}) {
   }
 
   const handleJoinRoom = async () =>{
-    const username = usernameRef.current.value;
+    const username = usernameRefEnter.current.value;
     const roomID = roomRef.current.value;
     if(!username.trim() || !roomID.trim()) return
     const socket = await io.connect('http://localhost:3001')
@@ -44,11 +45,19 @@ export default function Join({setSocket, setChatVisibility, setRoomID}) {
 
   return (
     <div className="join">
-        <h2> Chat 01 </h2>
-        <input type="text" ref={usernameRef} placeholder="Nome"/>
-        <button onClick={()=> handleCreateRoom()}> Criar Sala </button>
-        <input type="text" ref={roomRef} placeholder="Sala" />
-        <button onClick={()=> handleJoinRoom()}> Entrar </button>
+        <div className="join-item">
+          <h2> Criar Sala </h2>
+          <input type="text" ref={usernameRefCreate} placeholder="Nome"/>
+          <button onClick={()=> handleCreateRoom()}> Criar Sala </button>
+        </div>
+        
+        <div className="join-item">
+          <h2> Entrar em Sala </h2>
+          <input type="text" ref={usernameRefEnter} placeholder="Nome"/>
+          <input type="text" ref={roomRef} placeholder="Sala" />
+          <button onClick={()=> handleJoinRoom()}> Entrar </button>
+        </div>
     </div>
+
   )
 }
