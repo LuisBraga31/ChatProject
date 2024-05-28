@@ -1,25 +1,12 @@
-import { useState } from 'react'
-
-import Join from './componenets/Join/Join'
-import Chat from './componenets/Chat/Chat'
-
 import './App.css'
+import RouteList from './routes';
 
 function App() {
-
-  const [chatVisibility, setChatVisibility] = useState(false);
-  const [socket, setSocket] = useState(null);
-  const [roomID, setRoomID] = useState('');
 
   return (
     <div className="app">
       <h1 className="title"> Chat em Tempo Real </h1>
-      {
-        chatVisibility ? 
-          <Chat socket={socket} roomID={roomID}/> 
-            : 
-          <Join setSocket={setSocket} setChatVisibility={setChatVisibility} setRoomID={setRoomID}/>
-      }
+      <RouteList/>
     </div>
   )
 }

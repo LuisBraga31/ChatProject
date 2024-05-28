@@ -3,18 +3,21 @@ import { useRef, useState, useEffect } from "react"
 import { IoMdSend } from "react-icons/io";
 
 import './chat.css';
+import { useParams } from "react-router";
 
-export default function Chat({socket, roomID}) {
+export default function Chat({socket}) {
 
   const messageRef = useRef();
   const bottomRef = useRef();
   const [messageList, setMessageList] = useState([]);
 
+  const roomID = useParams();
+
   const handleSubmit = () => {
     const message = messageRef.current.value
     if(!message.trim()) return
 
-    socket.emit('message', roomID, message)
+    socket.emit('message', roomID.id, message)
     clearInput()
     focusInput()
   }
@@ -62,7 +65,7 @@ export default function Chat({socket, roomID}) {
   
   return (
     <div className="chat">
-      <h1> {roomID} </h1>
+      <h1> {roomID.id} </h1>
         <div className="chat-container">
           
           <div className="chat-body">

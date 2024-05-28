@@ -3,12 +3,16 @@ import { useRef } from "react"
 import io from 'socket.io-client'
 
 import './join.css';
+import { useNavigate } from "react-router";
 
-export default function Join({setSocket, setChatVisibility, setRoomID}) {
+
+export default function Join({setSocket, setRoomID}) {
 
   const usernameRefCreate = useRef();
   const usernameRefEnter = useRef();
   const roomRef = useRef();
+
+  const navigate = useNavigate();
 
   const handleCreateRoom = async () =>{
     const username = usernameRefCreate.current.value;
@@ -20,7 +24,7 @@ export default function Join({setSocket, setChatVisibility, setRoomID}) {
     socket.on('room_created', (roomID) => {
       setSocket(socket)
       setRoomID(roomID)
-      setChatVisibility(true)
+      navigate(`/chat/${roomID}`)
     })
 
   }
@@ -35,7 +39,7 @@ export default function Join({setSocket, setChatVisibility, setRoomID}) {
     socket.on('room_joined', () => {
       setSocket(socket)
       setRoomID(roomID)
-      setChatVisibility(true)
+      navigate(`/chat/${roomID}`)
     })
     socket.on('error', (message) => {
       alert(message)
