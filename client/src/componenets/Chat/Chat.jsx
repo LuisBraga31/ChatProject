@@ -65,7 +65,7 @@ export default function Chat({socket}) {
   
   return (
     <div className="chat">
-      <h1> {roomID.id} </h1>
+      <h2 className="chat-room"> Sala: {roomID.id} </h2>
         <div className="chat-container">
           
           <div className="chat-body">

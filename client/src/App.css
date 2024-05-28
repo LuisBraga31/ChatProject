@@ -1,6 +1,6 @@
 body{
   height: 100vh;
-  background: linear-gradient(to right, #34B7F1 0%, #25D366 100%);
+  background: #444444;
   display: flex;
   justify-content: center;
   padding-top: 40px;
