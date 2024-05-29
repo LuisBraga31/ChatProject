@@ -12,19 +12,32 @@
 }
 
 .join-item {
-    min-width: 300px;
-    min-height: 250px;
-    background-color: aliceblue;
-    padding: 40px;
+    min-width: 500px;
+    min-height: 280px;
+    background-color: rgb(166, 177, 186);
+    padding: 25px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: top;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
+}
+
+.join-item h2 {
+    font-size: 36px;
+}
+
+.join-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    height: 70px;
 }
 
 .join-item button {
+    width: 30%;
     background-color: #34B7F1;
     cursor: pointer;
     padding: 8px 16px;
@@ -39,5 +52,3 @@
     transform: scale(1.1);
     font-weight: bold;
 }
-
-

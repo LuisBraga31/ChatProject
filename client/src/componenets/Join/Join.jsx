@@ -51,14 +51,19 @@ export default function Join({setSocket, setRoomID}) {
     <div className="join">
         <div className="join-item">
           <h2> Criar Sala </h2>
-          <input type="text" ref={usernameRefCreate} placeholder="Nome"/>
+          <div className="join-content">
+            <input type="text" ref={usernameRefCreate} placeholder="Nome"/>
+            
+          </div>
           <button onClick={()=> handleCreateRoom()}> Criar Sala </button>
         </div>
         
         <div className="join-item">
           <h2> Entrar em Sala </h2>
-          <input type="text" ref={usernameRefEnter} placeholder="Nome"/>
-          <input type="text" ref={roomRef} placeholder="Sala" />
+          <div className="join-content">
+            <input type="text" ref={usernameRefEnter} placeholder="Nome"/>
+            <input type="text" ref={roomRef} placeholder="Sala" />
+          </div>
           <button onClick={()=> handleJoinRoom()}> Entrar </button>
         </div>
     </div>
