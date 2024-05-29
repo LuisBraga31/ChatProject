@@ -3,13 +3,10 @@
     gap: 40px;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-@media (max-width: 768px) {
-    .join {
-        flex-direction: column;
-    }
-}
+
 
 .join-item {
     min-width: 500px;
@@ -22,6 +19,17 @@
     justify-content: top;
     align-items: center;
     gap: 30px;
+}
+
+@media (max-width: 508px) {
+    .join-item {
+        min-width: 400px;
+    }
+}
+@media (max-width: 400px) {
+    .join-item {
+        min-width: 350px;
+    }
 }
 
 .join-item h2 {
@@ -46,6 +54,12 @@
     color: black;
     font-weight: normal;
     transition: 0.3s all linear;
+}
+
+@media (max-width: 400px) {
+    .join-item button{
+        width: 40%;
+    }
 }
 
 .join-item button:hover {

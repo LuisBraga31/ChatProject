@@ -65,7 +65,7 @@ export default function Chat({socket}) {
   
   return (
     <div className="chat">
-      <h2 className="chat-room"> Sala: {roomID.id} </h2>
+        <h2 className="chat-room"> Sala: {roomID.id} </h2>
         <div className="chat-container">
           
           <div className="chat-body">
@@ -88,13 +88,10 @@ export default function Chat({socket}) {
 
           <div className="chat-footer">
             <input type="text" ref={messageRef} onKeyDown={(e)=>getEnterKey(e)} placeholder="Mensagem"/>
-            <button onClick={() => handleSubmit()}> <IoMdSend color="#34B7F1" size={16}/> </button>
+            <button onClick={() => handleSubmit()}> <IoMdSend color="#34B7F1" size={20}/> </button>
           </div>
 
         </div>
-        
-
-
     </div>
   )
 }

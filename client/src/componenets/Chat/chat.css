@@ -8,10 +8,11 @@
 
 .chat-room {
     width: 100%;
-    padding: 5px;
+    padding: 8px;
     text-align: center;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
+    color: white;
     background-color: #333333;
 }
 
@@ -81,11 +82,6 @@
     cursor: pointer;
     border: none;
     transition: 0.3s all linear;
-}
-
-.chat-footer button:hover {
-    transform: scale(1.1);
-    font-weight: bold;
 }
 
 .system {
