@@ -26,20 +26,22 @@ io.on('connection', socket =>{
         rooms.set(roomID, new Set());
         socket.join(roomID)
         socket.data.room = roomID
-        rooms.get(roomID).add(socket.id);
+        rooms.get(roomID).add({ id: socket.id, username: socket.data.username })
         socket.emit('room_created', roomID)
+        io.to(roomID).emit('update_users', Array.from(rooms.get(roomID))) //Add users in a Array
         console.log(`Room criada: ${roomID} por ${socket.data.username}`)
     })
 
     // Entrando em uma sala
     socket.on('join_room', roomID => {
         if(rooms.has(roomID)) {
-            socket.join(roomID);
-            socket.emit('room_joined', roomID);
-            rooms.get(roomID).add(socket.id);
+            socket.join(roomID)
+            socket.emit('room_joined', roomID)
+            rooms.get(roomID).add({ id: socket.id, username: socket.data.username })
             socket.data.room = roomID
-            io.to(roomID).emit('user_joined', `${socket.data.username} entrou na sala!`);
-            console.log(`Usuário ${socket.data.username} entrou na sala ${roomID}`);
+            io.to(roomID).emit('user_joined', `${socket.data.username} entrou na sala!`)
+            io.to(roomID).emit('update_users', Array.from(rooms.get(roomID)))
+            console.log(`Usuário ${socket.data.username} entrou na sala ${roomID}`)
         } else {
             socket.emit('error', 'Sala não encontrada')
         }        
@@ -49,15 +51,16 @@ io.on('connection', socket =>{
     //Saindo da sala
     socket.on('leave_room', roomID => {
         if(socket.data.room === roomID) {
-            io.to(roomID).emit('user_left', `${socket.data.username} saiu da sala!`);
-            socket.leave(roomID);
-            socket.data.room = null;
-            rooms.get(roomID).delete(socket.id); 
-            console.log(`Usuário ${socket.data.username} saiu da sala ${roomID}`);
+            io.to(roomID).emit('user_left', `${socket.data.username} saiu da sala!`)
+            socket.leave(roomID)
+            socket.data.room = null
+            rooms.get(roomID).delete({ id: socket.id, username: socket.data.username })
+            io.to(roomID).emit('update_users', Array.from(rooms.get(roomID)))
+            console.log(`Usuário ${socket.data.username} saiu da sala ${roomID}`)
         }
         if(rooms.get(roomID).size === 0) {
-            rooms.delete(roomID);
-            console.log(`Sala ${roomID} foi removida por estar vazia.`);
+            rooms.delete(roomID)
+            console.log(`Sala ${roomID} foi removida por estar vazia.`)
         }
 
     })
@@ -80,12 +83,13 @@ io.on('connection', socket =>{
         if(roomID) {
             io.to(socket.data.room).emit('user_left', `${socket.data.username} saiu da sala`)
             socket.leave(roomID)
-            rooms.get(roomID).delete(socket.id); 
-            console.log(`Usuário ${socket.data.username} desconectado da sala: ${roomID}`);
+            rooms.get(roomID).delete({ id: socket.id, username: socket.data.username })
+            io.to(roomID).emit('update_users', Array.from(rooms.get(roomID)))
+            console.log(`Usuário ${socket.data.username} desconectado da sala: ${roomID}`)
             
             if(rooms.get(roomID).size === 0) {
                 rooms.delete(roomID);
-                console.log(`Sala ${roomID} foi removida por estar vazia.`);
+                console.log(`Sala ${roomID} foi removida por estar vazia.`)
             }
         }
         
