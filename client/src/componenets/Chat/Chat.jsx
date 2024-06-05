@@ -18,6 +18,7 @@ export default function Chat({socket}) {
     if(!message.trim()) return
 
     socket.emit('message', roomID.id, message)
+    
     clearInput()
     focusInput()
   }

@@ -19,8 +19,7 @@ export default function Join({setSocket, setRoomID}) {
 
     if(!username.trim()) return
     const socket = await io.connect('http://localhost:3001')
-    socket.emit('set_username', username)
-    socket.emit('create_room')
+    socket.emit('create_room', username)
     socket.on('room_created', (roomID) => {
       setSocket(socket)
       setRoomID(roomID)
@@ -34,8 +33,7 @@ export default function Join({setSocket, setRoomID}) {
     const roomID = roomRef.current.value;
     if(!username.trim() || !roomID.trim()) return
     const socket = await io.connect('http://localhost:3001')
-    socket.emit('set_username', username)
-    socket.emit('join_room', roomID)
+    socket.emit('join_room', roomID, username)
     socket.on('room_joined', () => {
       setSocket(socket)
       setRoomID(roomID)
