@@ -77,7 +77,9 @@ export default function Chat({socket}) {
                     <div className="message-text system">{message.text}</div>
                   ) : (
                     <>
-                      <div className="message-author"><strong>{message.author}</strong></div>
+                      <div className={`message-author ${message.func === 'admin' && `message-admin`}`}>
+                        <span> {message.author} </span>
+                      </div>
                       <div className="message-text">{message.text}</div>
                     </>
                   )}

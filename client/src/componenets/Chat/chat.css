@@ -46,10 +46,19 @@
     color: rgb(56, 64, 66);
 }
 
+.message-container span {
+    font-weight: 500;
+}
+
 .message-mine{
     align-self: end;
     background-color: skyblue;
     color: rgb(56, 64, 66);
+}
+
+.message-admin span {
+    font-weight: bold;
+    color: rgb(188, 160, 75);
 }
 
 .chat-body{

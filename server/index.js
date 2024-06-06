@@ -40,8 +40,10 @@ io.on('connection', socket =>{
     // Entrando em uma sala
     socket.on('join_room', (roomID, username) => {
         if(rooms.has(roomID)) {
+            
             socket.join(roomID);
             socket.emit('room_joined', roomID);
+            
             rooms.get(roomID).add(socket.id);
             newUser(roomID, username, 'user')
 
@@ -58,7 +60,8 @@ io.on('connection', socket =>{
         io.to(roomID).emit('receive_message', {
             text,
             authorId: socket.id,
-            author: socket.data.username
+            author: socket.data.username,
+            func: socket.data.userFunction
         })
         console.log(socket.data)
     });
