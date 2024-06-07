@@ -7,6 +7,8 @@ const generateID = () => {
 };
 
 const rooms = new Map();
+let userCount = 0;
+const MAX_USERS_PER_ROOM = 4;
 
 const PORT = 3001
 
@@ -16,6 +18,12 @@ io.on('connection', socket =>{
         socket.data.username = username 
         socket.data.room = roomID
         socket.data.userFunction = userFunction
+    }
+
+    function updatePlayerCount(roomID) {
+        const playerCount = rooms.get(roomID)?.size || 0;
+        io.to(roomID).emit('update_player_count', playerCount);
+        console.log('qtd de jogadores:', playerCount)
     }
 
     // Criando uma sala
@@ -31,7 +39,9 @@ io.on('connection', socket =>{
         newUser(roomID, username, 'admin')
 
         rooms.get(roomID).add(socket.id);
-        socket.emit('room_created', roomID)
+        socket.emit('room_created', roomID);
+
+        updatePlayerCount(roomID);
 
         console.log(`Room ${roomID} criada por ${socket.data.username}`)
 
@@ -40,15 +50,22 @@ io.on('connection', socket =>{
     // Entrando em uma sala
     socket.on('join_room', (roomID, username) => {
         if(rooms.has(roomID)) {
+            const room = rooms.get(roomID);
+            if (room.size < MAX_USERS_PER_ROOM) {
             
             socket.join(roomID);
             socket.emit('room_joined', roomID);
             
             rooms.get(roomID).add(socket.id);
             newUser(roomID, username, 'user')
+            updatePlayerCount(roomID);
 
             io.to(roomID).emit('user_joined', `${socket.data.username} entrou na sala!`);
             console.log(`Usuário ${socket.data.username} entrou na sala ${roomID}`);
+            } else {
+                socket.emit('error', 'Sala está cheia')
+            }
+
         } else {
             socket.emit('error', 'Sala não encontrada')
         }        
@@ -74,6 +91,7 @@ io.on('connection', socket =>{
             io.to(socket.data.room).emit('user_left', `${socket.data.username} saiu da sala`)
             socket.leave(roomID)
             rooms.get(roomID).delete(socket.id); 
+            updatePlayerCount(roomID);
             console.log(`Usuário ${socket.data.username} desconectado da sala: ${roomID}`);
             
             if(rooms.get(roomID).size === 0) {

@@ -10,6 +10,7 @@ export default function Chat({socket}) {
   const messageRef = useRef();
   const bottomRef = useRef();
   const [messageList, setMessageList] = useState([]);
+  const [playerCount, setPlayerCount] = useState(0);
 
   const roomID = useParams();
 
@@ -52,13 +53,17 @@ export default function Chat({socket}) {
       setMessageList((current) => [...current, { text: message, system: true }]);
     });
 
+    socket.on('update_player_count', (count) => {
+      setPlayerCount(count);
+    });
+
     return () => {
       socket.off('receive_message')
       socket.off('user_joined')
       socket.off('user_left')
     }
 
-  }, [socket])
+  }, [socket, playerCount])
 
   useEffect(()=>{
     scrollDown()
@@ -66,7 +71,7 @@ export default function Chat({socket}) {
   
   return (
     <div className="chat">
-        <h2 className="chat-room"> Sala: {roomID.id} </h2>
+        <h2 className="chat-room"> Sala: {roomID.id}  - {playerCount} conectado(s)</h2>
         <div className="chat-container">
           
           <div className="chat-body">
