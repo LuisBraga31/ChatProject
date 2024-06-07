@@ -42,6 +42,7 @@ export default function Chat({socket}) {
   }
 
   useEffect(()=> {
+    
     socket.on('receive_message', data => {
       setMessageList((current) => [... current, data])      
     })
@@ -61,6 +62,7 @@ export default function Chat({socket}) {
       socket.off('receive_message')
       socket.off('user_joined')
       socket.off('user_left')
+      socket.off('update_player_count')
     }
 
   }, [socket, playerCount])

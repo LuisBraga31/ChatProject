@@ -23,9 +23,8 @@ io.on('connection', socket =>{
     function updatePlayerCount(roomID) {
         const playerCount = rooms.get(roomID)?.size || 0;
         io.to(roomID).emit('update_player_count', playerCount);
-        console.log('qtd de jogadores:', playerCount)
+        console.log('qtd de jogadores:', playerCount);
     }
-
     // Criando uma sala
     socket.on('create_room', (username) => {
         let roomID;

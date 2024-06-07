@@ -14,7 +14,7 @@ export default function RouteList() {
 
             <Routes>
                 <Route path="/" element={<Join setSocket={setSocket} setRoomID={setRoomID}/>}/>
-                <Route path="/chat/:id" element={<Chat socket={socket} roomID={roomID}/>}/>
+                <Route path="/:id" element={<Chat socket={socket} roomID={roomID}/>}/>
             </Routes>
 
         </BrowserRouter>

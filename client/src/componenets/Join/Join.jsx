@@ -23,7 +23,7 @@ export default function Join({setSocket, setRoomID}) {
     socket.on('room_created', (roomID) => {
       setSocket(socket)
       setRoomID(roomID)
-      navigate(`/chat/${roomID}`)
+      navigate(`/${roomID}`)
     })
 
   }
